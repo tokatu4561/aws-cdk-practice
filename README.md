@@ -1,3 +1,5 @@
+下記講座のハンズオン
+https://www.udemy.com/course/aws-typescript-cdk-serverless-react/
 
 ## デプロイ
 ### デプロイ用のprofile設定
