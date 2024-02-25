@@ -12,7 +12,12 @@ import {
   PolicyStatement,
   Role,
 } from "aws-cdk-lib/aws-iam";
+import { IBucket } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
+
+interface AuthStackProps extends StackProps {
+  photoBucket: IBucket;
+}
 
 export class AuthStack extends Stack {
   public userPool: UserPool;
@@ -22,13 +27,13 @@ export class AuthStack extends Stack {
   private unAuthenticatedRole: Role;
   private adminRole: Role;
 
-  constructor(scope: Construct, id: string, props?: StackProps) {
+  constructor(scope: Construct, id: string, props?: AuthStackProps) {
     super(scope, id, props);
 
     this.createUserPool();
     this.createUserPoolClient();
     this.createIdentityPool();
-    this.createRoles();
+    this.createRoles(props.photoBucket);
     this.attachRoles();
     this.createAdminsGroup();
   }
@@ -87,7 +92,7 @@ export class AuthStack extends Stack {
     });
   }
 
-  private createRoles() {
+  private createRoles(photoBucket: IBucket) {
     // cognito identity pool に対して、認証されたユーザーと認証されていないユーザーのロールを作成
     // cognito identity pool がロールを引き受けて、ユーザーに代わって AWS サービスにアクセスできるようにする
     this.authenticatedRole = new Role(this, "CognitoDefaultAuthenticatedRole", {
@@ -141,7 +146,7 @@ export class AuthStack extends Stack {
       new PolicyStatement({
         effect: Effect.ALLOW,
         actions: ["s3:*"],
-        resources: ["*"],
+        resources: [`${photoBucket.bucketArn}/*`],
       })
     );
   }
