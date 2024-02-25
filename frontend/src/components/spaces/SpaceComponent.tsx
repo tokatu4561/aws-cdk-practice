@@ -1,6 +1,6 @@
 import genericImage from "../../assets/generic-photo.jpg";
 import { SpaceEntry } from "../model/model";
-import './SpaceComponent.css';
+import "./SpaceComponent.css";
 
 interface SpaceComponentProps extends SpaceEntry {
   reserveSpace: (spaceId: string, spaceName: string) => void;
@@ -9,9 +9,9 @@ interface SpaceComponentProps extends SpaceEntry {
 export default function SpaceComponent(props: SpaceComponentProps) {
   function renderImage() {
     if (props.photoUrl) {
-      return <img src={props.photoUrl}/>;
+      return <img src={props.photoUrl} />;
     } else {
-      return <img src={genericImage}/>;
+      return <img src={genericImage} />;
     }
   }
 
@@ -22,7 +22,9 @@ export default function SpaceComponent(props: SpaceComponentProps) {
       <br />
       <label className="location">{props.location}</label>
       <br />
-      <button onClick={() => props.reserveSpace(props.id, props.name)}>Reserve</button>
+      <button onClick={() => props.reserveSpace(props.id, props.name)}>
+        Reserve
+      </button>
     </div>
   );
 }
