@@ -21,7 +21,7 @@ export class DataStack extends Stack {
       tableName: `SpaceTable-${suffix}`,
     });
 
-    this.photoBucket = new Bucket(this, `SpacesFinderPhotoBucket-${suffix}`, {
+    this.photoBucket = new Bucket(this, `SpacesFinderPhotoBucket`, {
       bucketName: `spaces-finder-photos-${suffix}`,
       cors: [
         {

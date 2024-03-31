@@ -17,17 +17,17 @@ export class UiDeploymentStack extends Stack {
 
     // ui deployment bucket suffix is the same as the data stack
     const suffix = getSuffixFromStack(this);
-    const deploymentBucket = new Bucket(this, `uiDeploymentBucket${suffix}`, {
+    const deploymentBucket = new Bucket(this, `uiDeploymentBucket`, {
       bucketName: `frontend-${suffix}`,
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
-    const uiDir = join(__dirname, "..", "..", "frontend", "dist");
+    const uiDir = join(__dirname, "..", "..", "..", "frontend", "dist");
     if (!existsSync(uiDir)) {
       throw new Error(`UI directory not found at ${uiDir}`);
     }
 
-    new BucketDeployment(this, `uiDeployment${suffix}`, {
+    new BucketDeployment(this, `uiDeployment`, {
       sources: [Source.asset(uiDir)],
       destinationBucket: deploymentBucket,
     });
@@ -39,7 +39,7 @@ export class UiDeploymentStack extends Stack {
     deploymentBucket.grantRead(originAccessIdentity);
 
     // distribution
-    const distribution = new Distribution(this, `uiDistribution${suffix}`, {
+    const distribution = new Distribution(this, `uiDistribution`, {
       defaultBehavior: {
         origin: new S3Origin(deploymentBucket, {
           originAccessIdentity,
