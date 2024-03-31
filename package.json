@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "cdk deploy --all --outputs-file cdk-outputs.json"
+    "deploy": "cdk deploy --profile cdk-deploy --all --outputs-file cdk-outputs.json"
   },
   "keywords": [],
   "author": "",
@@ -21,8 +21,10 @@
     "typescript": "^5.0.2"
   },
   "dependencies": {
+    "@aws-sdk/client-cognito-identity": "^3.521.0",
     "@aws-sdk/client-dynamodb": "^3.303.0",
     "@aws-sdk/client-s3": "^3.301.0",
+    "@aws-sdk/credential-providers": "^3.521.0",
     "@aws-sdk/lib-dynamodb": "^3.306.0",
     "@aws-sdk/util-dynamodb": "^3.306.0",
     "@types/uuid": "^9.0.1",
