@@ -1,6 +1,6 @@
 import { type CognitoUser } from "@aws-amplify/auth";
 import { Amplify, Auth } from "aws-amplify";
-import { AuthStack } from "../../../space-finder/outputs.json";
+import { AuthStack } from "../../../cdk-outputs.json";
 import { CognitoIdentityClient } from "@aws-sdk/client-cognito-identity";
 import { fromCognitoIdentityPool } from "@aws-sdk/credential-providers";
 
