@@ -40,6 +40,7 @@ export class UiDeploymentStack extends Stack {
 
     // distribution
     const distribution = new Distribution(this, `uiDistribution`, {
+      defaultRootObject: "index.html",
       defaultBehavior: {
         origin: new S3Origin(deploymentBucket, {
           originAccessIdentity,
