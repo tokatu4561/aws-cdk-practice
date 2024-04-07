@@ -2,7 +2,7 @@ import { CfnOutput, Stack, StackProps } from "aws-cdk-lib";
 import { AttributeType, ITable, Table } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from "constructs";
 import { getSuffixFromStack } from "../Utils";
-import { Bucket, HttpMethods, IBucket } from "aws-cdk-lib/aws-s3";
+import { Bucket, HttpMethods, IBucket, ObjectOwnership } from "aws-cdk-lib/aws-s3";
 
 export class DataStack extends Stack {
   public readonly spacesTable: ITable;
@@ -13,6 +13,7 @@ export class DataStack extends Stack {
 
     const suffix = getSuffixFromStack(this);
 
+    // 写真保存 dynamodb
     this.spacesTable = new Table(this, "SpacesTable", {
       partitionKey: {
         name: "id",
@@ -21,6 +22,7 @@ export class DataStack extends Stack {
       tableName: `SpaceTable-${suffix}`,
     });
 
+    // 写真保存するs3
     this.photoBucket = new Bucket(this, `SpacesFinderPhotoBucket`, {
       bucketName: `spaces-finder-photos-${suffix}`,
       cors: [
@@ -35,6 +37,7 @@ export class DataStack extends Stack {
           allowedHeaders: ["*"],
         },
       ],
+      objectOwnership: ObjectOwnership.OBJECT_WRITER, // バケット内のオブジェクトの所有者
       blockPublicAccess: {
         blockPublicAcls: false,
         blockPublicPolicy: false,
