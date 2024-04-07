@@ -141,11 +141,16 @@ export class AuthStack extends Stack {
         "sts:AssumeRoleWithWebIdentity"
       ),
     });
-    // s3 へのフルアクセスを許可
     this.adminRole.addToPolicy(
       new PolicyStatement({
         effect: Effect.ALLOW,
-        actions: ["s3:*"],
+        actions: [
+          "s3:ListBucket",
+          "s3:GetObject",
+          's3:PutObject',
+          's3:PutObjectAcl',
+          "s3:DeleteObject"
+        ],
         resources: [`${photoBucket.bucketArn}/*`],
       })
     );
