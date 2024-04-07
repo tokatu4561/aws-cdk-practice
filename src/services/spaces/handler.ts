@@ -9,27 +9,35 @@ import { JsonError, MissingFieldError } from "../shared/Validator";
 
 const ddbClient = new DynamoDBClient({});
 
-async function handler(event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
+function addCorsHeader(arg: APIGatewayProxyResult) {
+    if(!arg.headers) {
+        arg.headers = {}
+    }
+    arg.headers['Access-Control-Allow-Origin'] = '*';
+    arg.headers['Access-Control-Allow-Methods'] = '*';
+}
 
-    let message: string;
+async function handler(event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
+    let response: APIGatewayProxyResult;
 
     try {
         switch (event.httpMethod) {
             case 'GET':
                 const getResponse = await getSpaces(event, ddbClient);
-                console.log(getResponse)
-                return getResponse;
+                response = getResponse
+                break;
             case 'POST':
                 const postResponse = await postSpaces(event, ddbClient);
-                return postResponse;
+                response = postResponse;
+                break;
             case 'PUT':
                 const putResponse = await updateSpace(event, ddbClient);
-                console.log(putResponse)
-                return putResponse;
+                response = putResponse;
+                break;
             case 'DELETE':
                 const deleteResponse = await deleteSpace(event, ddbClient);
-                console.log(deleteResponse)
-                return deleteResponse;
+                response = deleteResponse;
+                break;
             default:
                 break;
         }
@@ -52,14 +60,7 @@ async function handler(event: APIGatewayProxyEvent, context: Context): Promise<A
         }
     }
 
-
-
-
-    const response: APIGatewayProxyResult = {
-        statusCode: 200,
-        body: JSON.stringify(message)
-    }
-
+    addCorsHeader(response)
     return response;
 }
 
