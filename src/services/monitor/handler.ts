@@ -1,8 +1,16 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { APIGatewayProxyEvent, APIGatewayProxyResult, Context, SNSEvent } from "aws-lambda";
+import { SNSEvent } from "aws-lambda";
 
-async function handler(event: SNSEvent, context: Context): Promise<APIGatewayProxyResult> {
-  
+const webHookUrl = 'WEBHOOK_URL';
+
+async function handler(event: SNSEvent, context) {
+    for (const record of event.Records) {
+        await fetch(webHookUrl, {
+            method: 'POST',
+            body: JSON.stringify({
+                "text": `${record.Sns.Message}`
+            })
+        })
+    }
 }
 
 export { handler }
